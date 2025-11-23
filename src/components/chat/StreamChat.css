@@ -1,0 +1,464 @@
+/* Stream Chat WhatsApp-style customization for healthcare messaging */
+
+.stream-chat-container {
+  height: 100vh;
+  background: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.chat-layout {
+  display: flex;
+  height: 100vh;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== SIDEBAR STYLES ========== */
+.chat-sidebar {
+  width: 350px;
+  background: #f8f9fa;
+  border-right: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 20px 16px;
+  background: #007bff;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-header h5 {
+  margin: 0 0 12px 0;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.user-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.online-indicator {
+  width: 8px;
+  height: 8px;
+  background: #25d366;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Channel List Customization */
+.str-chat__channel-list {
+  flex: 1;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.str-chat__channel-search {
+  padding: 16px !important;
+  border-bottom: 1px solid #e9ecef !important;
+}
+
+.str-chat__channel-search input {
+  border: 1px solid #dee2e6 !important;
+  border-radius: 20px !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  background: white !important;
+}
+
+.str-chat__channel-search input:focus {
+  border-color: #007bff !important;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1) !important;
+}
+
+/* Custom Channel Preview */
+.channel-preview {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f4;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.channel-preview:hover {
+  background: #f5f6fa;
+}
+
+.channel-preview.active {
+  background: #e3f2fd;
+  border-right: 3px solid #007bff;
+}
+
+.channel-avatar {
+  position: relative;
+}
+
+.group-avatar {
+  width: 40px;
+  height: 40px;
+  background: #007bff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+}
+
+.channel-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.channel-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.last-message-time {
+  font-size: 12px;
+  color: #8696a0;
+}
+
+.channel-last-message {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message-preview {
+  font-size: 14px;
+  color: #667781;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.no-messages {
+  font-size: 14px;
+  color: #8696a0;
+  font-style: italic;
+}
+
+.department-badge {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.unread-badge {
+  background: #25d366;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+/* Quick Actions */
+.quick-actions {
+  padding: 16px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 8px 12px;
+  border: 1px solid #dee2e6;
+  background: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: #f8f9fa;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.action-btn.emergency {
+  background: #fff5f5;
+  border-color: #feb2b2;
+  color: #c53030;
+}
+
+.action-btn.emergency:hover {
+  background: #fed7d7;
+}
+
+/* ========== MAIN CHAT AREA ========== */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+/* Override Stream Chat styles */
+.str-chat__channel {
+  height: 100% !important;
+}
+
+.str-chat__container {
+  height: 100% !important;
+}
+
+/* Channel Header */
+.str-chat__channel-header {
+  background: white !important;
+  border-bottom: 1px solid #e9ecef !important;
+  padding: 16px 20px !important;
+}
+
+.str-chat__channel-header-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.str-chat__channel-header-text {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+}
+
+/* Message List */
+.str-chat__list {
+  background: #f0f2f5 !important;
+  padding: 16px !important;
+}
+
+.str-chat__message-simple {
+  margin-bottom: 12px !important;
+}
+
+/* Custom Message Styles */
+.custom-message {
+  max-width: 70%;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-message.own {
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.custom-message.emergency {
+  max-width: 85%;
+}
+
+.emergency-header {
+  background: #ff4444;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 12px 12px 4px 4px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 2px;
+}
+
+.message-content {
+  background: white;
+  border-radius: 18px;
+  padding: 12px 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.custom-message.own .message-content {
+  background: #dcf8c6;
+}
+
+.custom-message.emergency .message-content {
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+}
+
+.message-text {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #1a1a1a;
+  word-wrap: break-word;
+}
+
+.message-attachments {
+  margin-top: 8px;
+}
+
+.attachment img {
+  max-width: 200px;
+  border-radius: 8px;
+}
+
+.file-attachment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.file-attachment i {
+  color: #007bff;
+}
+
+.message-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #8696a0;
+}
+
+.user-role {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* Message Input */
+.str-chat__message-input {
+  background: white !important;
+  border-top: 1px solid #e9ecef !important;
+  padding: 16px 20px !important;
+}
+
+.str-chat__message-input-inner {
+  border: 1px solid #dee2e6 !important;
+  border-radius: 24px !important;
+  padding: 8px 16px !important;
+  background: #f8f9fa !important;
+}
+
+.str-chat__message-input-inner:focus-within {
+  border-color: #007bff !important;
+  background: white !important;
+}
+
+.str-chat__textarea__textarea {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  resize: none !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+}
+
+/* Loading and Error States */
+.stream-chat-loading,
+.stream-chat-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f8f9fa;
+  text-align: center;
+  padding: 20px;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.stream-chat-error h4 {
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.stream-chat-error p {
+  color: #6c757d;
+  margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .chat-layout {
+    flex-direction: column;
+  }
+  
+  .chat-sidebar {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .chat-main {
+    height: calc(100vh - 200px);
+  }
+  
+  .custom-message {
+    max-width: 85%;
+  }
+}
+
+/* Healthcare Theme Colors */
+:root {
+  --healthcare-primary: #007bff;
+  --healthcare-success: #25d366;
+  --healthcare-warning: #ffc107;
+  --healthcare-danger: #dc3545;
+  --healthcare-info: #17a2b8;
+  --healthcare-light: #f8f9fa;
+  --healthcare-dark: #343a40;
+}
+
+/* Hide Stream Chat branding */
+.str-chat__channel-header-livestream,
+.str-chat__message-simple-status,
+.str-chat__quoted-message-preview {
+  display: none !important;
+}

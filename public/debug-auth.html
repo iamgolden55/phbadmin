@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Debug</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .info { background: #e3f2fd; padding: 10px; margin: 10px 0; }
+        .error { background: #ffebee; padding: 10px; margin: 10px 0; }
+        .success { background: #e8f5e9; padding: 10px; margin: 10px 0; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard - Auth Debug</h1>
+
+    <div id="output"></div>
+
+    <button onclick="checkTokens()">Check Tokens</button>
+    <button onclick="checkCurrentUser()">Check Current User</button>
+    <button onclick="clearAuth()">Clear Auth & Logout</button>
+    <button onclick="location.href='/'">Go to Login</button>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+
+        function log(message, type = 'info') {
+            const output = document.getElementById('output');
+            const div = document.createElement('div');
+            div.className = type;
+            div.innerHTML = message;
+            output.appendChild(div);
+        }
+
+        function checkTokens() {
+            document.getElementById('output').innerHTML = '';
+
+            const accessToken = localStorage.getItem('access_token');
+            const refreshToken = localStorage.getItem('refresh_token');
+
+            if (accessToken) {
+                log(`✅ Access Token Found: ${accessToken.substring(0, 50)}...`, 'success');
+
+                // Decode JWT to see user info
+                try {
+                    const payload = JSON.parse(atob(accessToken.split('.')[1]));
+                    log(`📝 Token Payload: <pre>${JSON.stringify(payload, null, 2)}</pre>`, 'info');
+                    log(`👤 User ID: ${payload.user_id}`, 'info');
+                    log(`⏰ Expires: ${new Date(payload.exp * 1000).toLocaleString()}`, 'info');
+                } catch (e) {
+                    log(`❌ Failed to decode token: ${e.message}`, 'error');
+                }
+            } else {
+                log('❌ No Access Token Found', 'error');
+            }
+
+            if (refreshToken) {
+                log(`✅ Refresh Token Found: ${refreshToken.substring(0, 50)}...`, 'success');
+            } else {
+                log('❌ No Refresh Token Found', 'error');
+            }
+        }
+
+        async function checkCurrentUser() {
+            document.getElementById('output').innerHTML = '';
+
+            const accessToken = localStorage.getItem('access_token');
+
+            if (!accessToken) {
+                log('❌ No access token found. Please login first.', 'error');
+                return;
+            }
+
+            try {
+                log('🔄 Fetching current user...', 'info');
+
+                const response = await fetch(`${API_URL}/api/auth/me/`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const user = await response.json();
+
+                log(`✅ User Data Retrieved:`, 'success');
+                log(`<pre>${JSON.stringify(user, null, 2)}</pre>`, 'info');
+
+                // Check registry_role specifically
+                if (user.registry_role) {
+                    log(`✅ Registry Role: ${user.registry_role.name}`, 'success');
+                    log(`📋 Permissions: ${user.registry_role.permissions.join(', ')}`, 'success');
+
+                    // Check for manage_users permission
+                    if (user.registry_role.permissions.includes('manage_users')) {
+                        log(`✅ HAS manage_users permission!`, 'success');
+                    } else {
+                        log(`❌ MISSING manage_users permission!`, 'error');
+                    }
+                } else {
+                    log(`❌ No registry_role found on user!`, 'error');
+                }
+
+                // Check if superuser
+                if (user.is_superuser) {
+                    log(`✅ User is Superuser`, 'success');
+                }
+
+            } catch (error) {
+                log(`❌ Error fetching user: ${error.message}`, 'error');
+            }
+        }
+
+        function clearAuth() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            log('✅ Cleared all auth tokens. You are now logged out.', 'success');
+            log('🔄 Redirecting to login in 2 seconds...', 'info');
+            setTimeout(() => {
+                location.href = '/';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
